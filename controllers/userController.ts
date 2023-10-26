@@ -12,15 +12,13 @@ export const userController = {
 
         try 
         {
-            const newUser = new User(req.body as IUser);
-            const doc = await newUser.save();
-            return res.status(200).send(doc)
+            const newUser = await User.createUser(req.body as IUser)
+            return res.status(200).send(newUser);
         } 
         catch (error) {
             console.log(`An error occured during insert of new Conversation :${error}`);
-            return res.status(500);
+            return res.status(500).send({message: `An error occured during user creation => ${error}`});
         }
-        
     }
 
 }
