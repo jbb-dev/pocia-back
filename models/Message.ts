@@ -1,20 +1,19 @@
 import mongoose from "mongoose";
 
-// 1. Create an interface representing a document in MongoDB.
+export enum EWriterRole {
+    USER = 'user',
+    ASSISTANT = 'assistant',
+    SYSTEM = 'system'
+}
+
 export interface IMessage {
     user: string;
     content: string;
-    email: string;
-    avatar?: string;
 }
 
-const messageSchema = new mongoose.Schema({
+const messageSchema = new mongoose.Schema<IMessage>({
     user: String,
-    content: String,
-    createdAt: { 
-        type: Date, 
-        default: Date.now 
-    },
-});
+    content: String,    
+}, { timestamps: true });
 
 export const Message = mongoose.model('Message', messageSchema);

@@ -17,21 +17,4 @@ const userSchema = new Schema<IUser>({
 })
 
 // 3. Create a Model.
-const User = model<IUser>('User', userSchema);
-
-//   const userSchema = new mongoose.Schema({
-//     user: String,
-//     text: String,
-//     createdAt: { 
-//         type: Date, 
-//         default: Date.now 
-//     },
-//     updatedAt: { 
-//         type: Date, 
-//         default: Date.now 
-//     },
-// });
-
-// const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export const User = model<IUser>('User', userSchema);

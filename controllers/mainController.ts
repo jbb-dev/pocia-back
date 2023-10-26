@@ -48,8 +48,10 @@ export const mainController = {
         // Save the message to MongoDB
         // const message = new Message({ user: "toto", text: completion.choices[0].message.content });
         // await message.save();
-       // Prevent additional documents from being inserted if one fails
+
+        // Prevent additional documents from being inserted if one fails
         const options = { ordered: true };
+
         // Execute insert operation
         try 
         {
