@@ -17,7 +17,7 @@ export const userController = {
             return res.status(200).send(doc)
         } 
         catch (error) {
-            console.log(`An error occured during insert of new User :${error}`);
+            console.log(`An error occured during insert of new Conversation :${error}`);
             return res.status(500);
         }
         
