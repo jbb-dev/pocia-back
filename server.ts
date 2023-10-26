@@ -6,6 +6,7 @@ import "./db_config/mongo";
 
 import mainRouter from './routes/mainRouter';
 import userRouter from './routes/userRouter';
+import adminRouter from './routes/adminRouter';
 
 const app: Express = express();
 const MAIN_PORT = process.env.PORT;
@@ -21,6 +22,7 @@ app.use(express.urlencoded({
 app.get('/', (req: Request, res: Response) => res.send('home main server'));
 app.use('/api', mainRouter);
 app.use('/api/user', userRouter);
+app.use('/api/admin', adminRouter);
 
 
 // Listen server

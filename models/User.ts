@@ -11,6 +11,7 @@ export interface IUser {
 // Create a new model with statics methods:
 interface IUserModel extends Model<IUser> {
     createUser(user: IUser): Promise<IUser>;
+    getUsers(): Promise<IUser[]>;
 }
 
 // Create a Schema corresponding to the document interface.
@@ -19,11 +20,18 @@ const userSchema = new Schema<IUser, IUserModel>({
     lastname: { type: String, required: true },
     email: { type: String, required: true },
     avatar: String,
-})
+}, { timestamps: true });
 
-// Add statics methods
+// Add statics methods:
+
+// Create new user
 userSchema.statics.createUser = async function (user: IUser): Promise<IUser> {
     return this.create(user);
+};
+
+// Get All users
+userSchema.statics.getUsers = async function () {
+    return this.find();
 };
 
 // Create and export Model.
