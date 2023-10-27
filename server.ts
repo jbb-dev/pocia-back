@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import "./db_config/mongo";
 
-import mainRouter from './routes/mainRouter';
+import conversationRouter from './routes/conversationRouter';
 import userRouter from './routes/userRouter';
 import adminRouter from './routes/adminRouter';
 
@@ -20,7 +20,7 @@ app.use(express.urlencoded({
 
 // Routes
 app.get('/', (req: Request, res: Response) => res.send('home main server'));
-app.use('/api', mainRouter);
+app.use('/api', conversationRouter);
 app.use('/api/user', userRouter);
 app.use('/api/admin', adminRouter);
 

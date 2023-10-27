@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Schema, Types, model } from 'mongoose';
 
 export enum EWriterRole {
     USER = 'user',
@@ -7,13 +7,16 @@ export enum EWriterRole {
 }
 
 export interface IMessage {
-    user: string;
+    senderRole: { type: string, enum: EWriterRole };
     content: string;
+    conversationId: { type: Types.ObjectId, ref: "Conversation", required: true };
 }
 
-const messageSchema = new mongoose.Schema<IMessage>({
-    user: String,
-    content: String,    
+const messageSchema = new Schema<IMessage>({
+    senderRole: String,
+    content: String,
+    conversationId: Types.ObjectId  
 }, { timestamps: true });
 
-export const Message = mongoose.model('Message', messageSchema);
+
+export const Message = model<IMessage>('Message', messageSchema);
