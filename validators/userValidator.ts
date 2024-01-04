@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-export const subscribeValidator = () => {        
+export const credentialsValidator = () => {        
     return [
         check('firstname')
             .exists().withMessage("Your firstname needs to be filled").bail()
