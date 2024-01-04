@@ -15,7 +15,7 @@ export interface IUser {
 interface IUserModel extends Model<IUser> {
     findUser(email: string): Promise<IUser>;
     createUser(user: IUser): Promise<IUser>;
-    updateUser(userId: string, updateData: Partial<IUser>): Promise<IUser | null>;
+    updateUser(userId: string, updateData: Partial<IUser>): Promise<Partial<IUser>>;
     getUsers(): Promise<IUser[]>;
 }
 

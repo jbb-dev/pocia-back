@@ -70,7 +70,8 @@ export const userController = {
                     lastname: user.lastname,
                     firstname: user.firstname,
                     email: user.email,
-                    avatar: user.avatar
+                    avatar: user.avatar || "",
+                    password: ""
                 }
             });
             
@@ -89,10 +90,10 @@ export const userController = {
             // Update the user
             const updatedUser = await User.updateUser(userId, req.body as Partial<IUser>);
             return res.status(200).json({
-                lastname: updatedUser?.lastname,
-                firstname: updatedUser?.firstname,
-                email: updatedUser?.email,
-                avatar: updatedUser?.avatar
+                lastname: updatedUser.lastname,
+                firstname: updatedUser.firstname,
+                email: updatedUser.email,
+                avatar: updatedUser.avatar
             });
 
         } catch (error) {
