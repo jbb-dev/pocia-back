@@ -5,8 +5,8 @@ dotenv.config();
 
 const TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
-interface IUserTokenPayload {
-    id: string,
+export interface IUserTokenPayload {
+    userId: string,
     generatedAt: string,
     iat: number
 }
@@ -40,6 +40,7 @@ export const authenticateUser = async (req: RequestWithPayload, res: Response, n
         });
 
         req.payload = decoded;
+        
         next();
     } catch (error) {
         return res.status(403).json({ message: "Your session has expired, please reconnect" });

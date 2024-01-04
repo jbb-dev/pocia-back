@@ -7,6 +7,7 @@ dotenv.config();
 const TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
 import { IUser, User } from './../models/User';
+import { IUserTokenPayload, RequestWithPayload } from '~~/middlewares/authenticate';
 
 export const userController = {
 
@@ -55,7 +56,7 @@ export const userController = {
             // Create user token
             const token = jwt.sign(
                 {
-                    id: user._id,
+                    userId: user._id,
                     generatedAt: new Date()
                 }, 
                 TOKEN_SECRET
@@ -73,10 +74,10 @@ export const userController = {
         }
     },
 
-    updateProfile: async function (req: Request, res: Response) {
+    updateProfile: async function (req: RequestWithPayload, res: Response) {
 
-        // const { userId } = req.user.id;
-        const userId = "";
+        const { userId } = req.payload as IUserTokenPayload;
+        console.log('update Profile, userId ==> ', userId)
 
         try {
             // Update the user
