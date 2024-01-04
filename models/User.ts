@@ -1,8 +1,9 @@
-import { Model, Schema, model } from 'mongoose';
+import { Model, Schema, Types, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 // Create an interface representing a document in MongoDB.
 export interface IUser {
+    _id: Types.ObjectId;
     firstname: string;
     lastname: string;
     email: string;
@@ -38,16 +39,18 @@ userSchema.statics.findUser = async function(email: string): Promise<IUser | nul
 userSchema.statics.createUser = async function(user: IUser): Promise<IUser> {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const newUser = { ...user, password: hashedPassword };
-    return this.create(newUser);
+    return this.create(newUser)
 };
 
 // Update a user
-userSchema.statics.updateUser = async function(userId: string, updateData: Partial<IUser>): Promise<IUser | null> {
+userSchema.statics.updateUser = async function(userId: string, updateData: Partial<IUser>): Promise<Partial<IUser> | null> {
     // If provided, hash the new password
     if (updateData.password) {
         updateData.password = await bcrypt.hash(updateData.password, 10);
     }
-    return this.findByIdAndUpdate(userId, updateData, { new: true }).exec();
+    return this.findByIdAndUpdate(userId, updateData, { new: true })
+        .select('-password')
+        .exec();
 };
 
 // Get All users

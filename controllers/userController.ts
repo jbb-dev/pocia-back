@@ -7,7 +7,7 @@ dotenv.config();
 const TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
 import { IUser, User } from './../models/User';
-import { IUserTokenPayload, RequestWithPayload } from '~~/middlewares/authenticate';
+import { IUserTokenPayload, RequestWithPayload } from '../middlewares/authenticate';
 
 export const userController = {
 
@@ -40,7 +40,8 @@ export const userController = {
         try {
 
             // Check if user exists
-            const user = await User.findOne({ email });
+            const user: IUser = await User.findUser(email);
+
             if (!user) 
             {
                 return res.status(401).json({ message: 'Wrong email or password' });
@@ -65,7 +66,12 @@ export const userController = {
             // Send token and user data
             return res.status(200).json({
                 token,
-                user
+                user: {
+                    lastname: user.lastname,
+                    firstname: user.firstname,
+                    email: user.email,
+                    avatar: user.avatar
+                }
             });
             
         } catch (error) {
@@ -82,13 +88,17 @@ export const userController = {
         try {
             // Update the user
             const updatedUser = await User.updateUser(userId, req.body as Partial<IUser>);
-            return res.status(200).json(updatedUser);
+            return res.status(200).json({
+                lastname: updatedUser?.lastname,
+                firstname: updatedUser?.firstname,
+                email: updatedUser?.email,
+                avatar: updatedUser?.avatar
+            });
 
         } catch (error) {
             console.error(`An error occurred during user update : ${error}`);
             return res.status(500).json({ message: `An error occurred during your profile update` });
         }
-
     },
 
     
