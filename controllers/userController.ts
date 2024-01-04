@@ -50,6 +50,7 @@ export const userController = {
             }
 
             res.status(200).send({ message: 'Your have been successfully connected' });
+            
         } catch (error) {
             console.error(`Error during trying to login : ${error}`);
             res.status(500).send({ message: 'An error occured during login'});
