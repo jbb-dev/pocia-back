@@ -3,6 +3,7 @@ import { Schema, model, Model } from 'mongoose';
 // Create an interface representing a document in MongoDB.
 export interface IAssistant {
     name: string;
+    service: string;
     biography: string;
     avatar: string;
 }

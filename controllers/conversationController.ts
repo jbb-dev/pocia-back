@@ -45,17 +45,23 @@ export const conversationController = {
 
         // const { userId, assistantId, content } = req.body;
         const { content } = req.body;
+        const additionnal = "Write the response using “markdown format and answer in French ”"
+        // const additionnal = "Répond en formattant ta réponse en HTML"
 
         const userId = '653a24de0426e62175a11f0f';
         const assistantId = '653a2ee5bcce51a33028e684';
 
-        console.log('message => ', req.body)
+        console.log('content => ', content)
 
         // Generate chat response from Assistant
         const completion = await openai.chat.completions.create({
-            messages: [{ role: EWriterRole.USER, content }],
+            messages: [
+                { role: EWriterRole.SYSTEM, content: additionnal  },
+                { role: EWriterRole.USER, content: content  }
+            ],
             model: "gpt-3.5-turbo",
         });
+        console.log('GPT COMPLETION ====> ', completion.choices[0].message.content)
 
         // Find or Create the conversation
         try {
