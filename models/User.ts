@@ -14,6 +14,7 @@ export interface IUser {
 interface IUserModel extends Model<IUser> {
     findUser(email: string): Promise<IUser>;
     createUser(user: IUser): Promise<IUser>;
+    updateUser(userId: string, updateData: Partial<IUser>): Promise<IUser | null>;
     getUsers(): Promise<IUser[]>;
 }
 
@@ -38,6 +39,15 @@ userSchema.statics.createUser = async function(user: IUser): Promise<IUser> {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const newUser = { ...user, password: hashedPassword };
     return this.create(newUser);
+};
+
+// Update a user
+userSchema.statics.updateUser = async function(userId: string, updateData: Partial<IUser>): Promise<IUser | null> {
+    // If provided, hash the new password
+    if (updateData.password) {
+        updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+    return this.findByIdAndUpdate(userId, updateData, { new: true }).exec();
 };
 
 // Get All users

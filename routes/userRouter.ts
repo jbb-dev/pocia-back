@@ -5,8 +5,8 @@ import { loginValidator, credentialsValidator } from './../validators/userValida
 import { validateMandatoryFields } from '../middlewares/validator';
 
 userRouter
-    .post("/profile", credentialsValidator(), validateMandatoryFields, userController.subcribe)
-    // .put("/profile", credentialsValidator(), validateMandatoryFields, userController.subcribe)
     .post("/login", loginValidator(), validateMandatoryFields, userController.login)
+    .post("/profile", credentialsValidator(), validateMandatoryFields, userController.subcribe)
+    .put("/profile", credentialsValidator(), validateMandatoryFields, userController.updateProfile)
 
 export default userRouter;

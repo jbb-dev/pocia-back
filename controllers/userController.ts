@@ -71,7 +71,24 @@ export const userController = {
             console.error(`Error during trying to login : ${error}`);
             res.status(500).json({ message: 'An error occured during login'});
         }
-    }
+    },
+
+    updateProfile: async function (req: Request, res: Response) {
+
+        // const { userId } = req.user.id;
+        const userId = "";
+
+        try {
+            // Update the user
+            const updatedUser = await User.updateUser(userId, req.body as Partial<IUser>);
+            return res.status(200).json(updatedUser);
+
+        } catch (error) {
+            console.error(`An error occurred during user update : ${error}`);
+            return res.status(500).json({ message: `An error occurred during your profile update` });
+        }
+
+    },
 
     
 
