@@ -4,7 +4,8 @@ import { userController } from './../controllers/userController';
 
 
 userRouter
-    .post("/login")
-    .post("/subscribe", userController.createNewUser)
+    .post("/subscribe", userController.subcribe)
+    .post("/login", userController.login)
+
 
 export default userRouter;
