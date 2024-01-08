@@ -11,6 +11,13 @@ export interface IUser {
     avatar?: string;
 }
 
+
+// Create an interface representing a document in MongoDB.
+export interface IUserUpdateData {
+    firstname: string;
+    lastname: string;
+}
+
 // Create a new model with statics methods:
 interface IUserModel extends Model<IUser> {
     findUser(email: string): Promise<IUser>;
@@ -36,18 +43,19 @@ userSchema.statics.findUser = async function(email: string): Promise<IUser | nul
 };
 
 // Create new user
-userSchema.statics.createUser = async function(user: IUser): Promise<IUser> {
+userSchema.statics.createUser = async function(user: IUser): Promise<IUser | null> {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const newUser = { ...user, password: hashedPassword };
-    return this.create(newUser)
+    const createdUser = await this.create(newUser);
+
+    return this.findById(createdUser._id)
+        .select('-password')
+        .exec();
 };
 
 // Update a user
-userSchema.statics.updateUser = async function(userId: string, updateData: Partial<IUser>): Promise<Partial<IUser> | null> {
-    // If provided, hash the new password
-    if (updateData.password) {
-        updateData.password = await bcrypt.hash(updateData.password, 10);
-    }
+userSchema.statics.updateUser = async function(userId: string, updateData: IUserUpdateData): Promise<Partial<IUser> | null> {
+
     return this.findByIdAndUpdate(userId, updateData, { new: true })
         .select('-password')
         .exec();

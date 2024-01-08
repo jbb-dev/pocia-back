@@ -40,9 +40,10 @@ export const authenticateUser = async (req: RequestWithPayload, res: Response, n
         });
 
         req.payload = decoded;
-        
+
         next();
     } catch (error) {
+        console.error(`An error occured during token verification : ${error}`)
         return res.status(403).json({ message: "Your session has expired, please reconnect" });
     }
 

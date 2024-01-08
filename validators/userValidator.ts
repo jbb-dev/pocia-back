@@ -1,6 +1,7 @@
 import { check } from 'express-validator';
+import { passwordRegex } from '../utils/regex';
 
-export const credentialsValidator = () => {        
+export const subscribeValidator = () => {        
     return [
         check('firstname')
             .exists().withMessage("Your firstname needs to be filled").bail()
@@ -18,7 +19,7 @@ export const credentialsValidator = () => {
             .isEmail().normalizeEmail().withMessage("Email is invalid").bail(),
 
         check('password')
-            .matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$").bail()
+            .matches(passwordRegex).bail()
             .withMessage("Your password must be 8 characters long, an uppercase letter, a lowercase letter, a number or a special character").bail(),
     ];
 }
@@ -33,5 +34,20 @@ export const loginValidator = () => {
         check('password')
             .matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$").bail()
             .withMessage("Your password must be 8 characters long, an uppercase letter, a lowercase letter, a number or a special character").bail(),
+    ];
+}
+
+export const updateProfileValidator = () => {        
+    return [
+        check('firstname')
+            .optional()
+            .notEmpty().withMessage("Your firstname needs to be filled").bail()
+            .isString().trim().withMessage("Your firstname needs to be in a valid format").bail(),
+
+        check('lastname')
+            .optional()
+            .notEmpty().withMessage("Your lastname needs to be filled").bail()
+            .isString().trim().withMessage("Your lastname needs to be in a valid format").bail(),
+
     ];
 }

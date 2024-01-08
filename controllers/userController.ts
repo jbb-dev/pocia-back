@@ -6,7 +6,7 @@ dotenv.config();
 
 const TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
-import { IUser, User } from './../models/User';
+import { IUser, IUserUpdateData, User } from './../models/User';
 import { IUserTokenPayload, RequestWithPayload } from '../middlewares/authenticate';
 
 export const userController = {
@@ -84,17 +84,11 @@ export const userController = {
     updateProfile: async function (req: RequestWithPayload, res: Response) {
 
         const { userId } = req.payload as IUserTokenPayload;
-        console.log('update Profile, userId ==> ', userId)
 
         try {
             // Update the user
-            const updatedUser = await User.updateUser(userId, req.body as Partial<IUser>);
-            return res.status(200).json({
-                lastname: updatedUser.lastname,
-                firstname: updatedUser.firstname,
-                email: updatedUser.email,
-                avatar: updatedUser.avatar
-            });
+            const updatedUser = await User.updateUser(userId, req.body as IUserUpdateData);
+            return res.status(200).json(updatedUser);
 
         } catch (error) {
             console.error(`An error occurred during user update : ${error}`);
