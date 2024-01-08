@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -7,14 +7,13 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 import { EWriterRole, IMessage, Message } from '../models/Message';
 import { Conversation, IConversation } from '../models/Conversation';
+import { IUserTokenPayload, RequestWithPayload } from '../middlewares/authenticate';
 
 export const conversationController = {
 
-    getOneConversation: async function (req: Request, res: Response) {
+    getOneConversation: async function (req: RequestWithPayload, res: Response) {
 
-        // const { userId, assistantId } = req.body;
-        
-        const userId = '653a24de0426e62175a11f0f';
+        const { userId } = req.payload as IUserTokenPayload;        
         const assistantId = '653a2ee5bcce51a33028e684';
 
         try 
@@ -41,14 +40,14 @@ export const conversationController = {
         }
     },
 
-    chatWithAssistant: async function (req: Request, res: Response) {
+    chatWithAssistant: async function (req: RequestWithPayload, res: Response) {
 
-        // const { userId, assistantId, content } = req.body;
+        const { userId } = req.payload as IUserTokenPayload;
         const { content } = req.body;
-        const additionnal = "Write the response using “markdown format and answer in French ”"
-        // const additionnal = "Répond en formattant ta réponse en HTML"
 
-        const userId = '653a24de0426e62175a11f0f';
+        console.log('chat with assistant, body => ', content)
+
+        const additionnal = "Write the response using “markdown format and answer in French ”"
         const assistantId = '653a2ee5bcce51a33028e684';
 
         console.log('content => ', content)
@@ -92,11 +91,6 @@ export const conversationController = {
             console.log(`An error occured during upserting conversation :${error}`);
             return res.status(500);
         }
-
-        // Save the message to MongoDB
-        // const message = new Message({ user: "toto", text: completion.choices[0].message.content });
-        // await message.save();
-        
     }
 
 }
