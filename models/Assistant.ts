@@ -19,6 +19,7 @@ const assistantSchema = new Schema<IAssistant, IAssistantModel>({
     name: { type: String, required: true },
     biography: { type: String, required: true },
     avatar: { type: String, required: true },
+    job: { type: String, required: true },
 });
 
 // Add statics methods:

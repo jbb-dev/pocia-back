@@ -10,7 +10,7 @@ userRouter
     .post("/login", loginValidator(), validateMandatoryFields, userController.login)
     .post("/profile", subscribeValidator(), validateMandatoryFields, userController.subcribe)
 
-    // PRIVATE ROUTes
+    // PRIVATE ROUTES
     .put("/profile", authenticateUser, updateProfileValidator(), validateMandatoryFields, userController.updateProfile)
 
 export default userRouter;

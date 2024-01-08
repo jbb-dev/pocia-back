@@ -1,10 +1,11 @@
 import express, { Router } from 'express';
 const assistantRouter: Router = express.Router();
 import { assistantController } from '../controllers/assistantController';
+import { authenticateUser } from '../middlewares/authenticate';
 
 
 assistantRouter
-    .post("/", assistantController.createNewAssistant)
-    .get("/", assistantController.getAssistants)
+    .get("/", authenticateUser, assistantController.getAssistants)
+    .post("/", authenticateUser, assistantController.createNewAssistant) // TODO : add validator
 
 export default assistantRouter;

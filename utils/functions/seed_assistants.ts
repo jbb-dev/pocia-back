@@ -9,6 +9,8 @@ const seedDatabaseWithAssistants = async () => {
         console.log('Assistants have been successfully imported !');
     } catch (error) {
         console.error('An error occurend during assistants import :', error);
+    } finally {
+        process.exit();
     }
 };
 

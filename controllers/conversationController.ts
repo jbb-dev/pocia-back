@@ -13,7 +13,8 @@ export const conversationController = {
 
     getOneConversation: async function (req: RequestWithPayload, res: Response) {
 
-        const { userId } = req.payload as IUserTokenPayload;        
+        const { userId } = req.payload as IUserTokenPayload;
+        console.log("req body => ", req.body)  
         const assistantId = '653a2ee5bcce51a33028e684';
 
         try 
@@ -31,7 +32,7 @@ export const conversationController = {
             }
             else
             {
-                return res.status(404).json({message : `Aucune conversation n'a été trouvée`});
+                return res.status(200).json([]);
             }
         } 
         catch (error) {

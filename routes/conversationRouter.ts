@@ -2,9 +2,10 @@ import express, { Router } from 'express';
 const conversationRouter: Router = express.Router();
 
 import { conversationController } from '../controllers/conversationController';
+import { authenticateUser } from '../middlewares/authenticate';
 
 conversationRouter
-    .get("/conversation", conversationController.getOneConversation)
-    .post("/chat", conversationController.chatWithAssistant)
+    .get("/conversation", authenticateUser, conversationController.getOneConversation)
+    .post("/chat", authenticateUser, conversationController.chatWithAssistant)
 
 export default conversationRouter;

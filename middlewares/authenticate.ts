@@ -40,7 +40,6 @@ export const authenticateUser = async (req: RequestWithPayload, res: Response, n
         });
 
         req.payload = decoded;
-
         next();
     } catch (error) {
         console.error(`An error occured during token verification : ${error}`)
