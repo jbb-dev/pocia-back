@@ -1,4 +1,4 @@
-import { IAssistant } from "../models/Assistant";
+import { IAssistant } from "../../models/Assistant";
 
 export const ASSISTANTS_SEED: IAssistant[] = [
     {
@@ -49,6 +49,4 @@ export const ASSISTANTS_SEED: IAssistant[] = [
         biography: `Meet Chelsea Taylor, the brilliant Copywriter, born in 1990. Chelsea's love for the written word ignited at an early age, paving the way for her remarkable journey in the world of copywriting. Graduating with honors from a prestigious writing program, she swiftly rose through the ranks, leaving a trail of captivating campaigns and satisfied clients in her wake. Chelsea's gift for crafting compelling narratives earned her the moniker "Copywriting Virtuoso." She is a sought-after speaker at marketing and writing conferences, inspiring others with her creative insights. Beyond her professional achievements, Chelsea is an advocate for literacy and creative expression, making her a true luminary in the field of copywriting. Chelsea Taylor, a wordsmith extraordinaire, continues to shape the future of copywriting and storytelling.`,
         avatar: "https://wecreative.fr/demo/copywriter.png"
     }
-
-
-]
+];

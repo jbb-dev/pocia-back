@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { passwordRegex } from '../utils/regex';
+import { passwordRegex } from '../utils/constants/regex';
 
 export const subscribeValidator = () => {        
     return [
