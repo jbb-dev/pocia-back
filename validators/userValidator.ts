@@ -32,7 +32,7 @@ export const loginValidator = () => {
             .isEmail().normalizeEmail().withMessage("Email is invalid").bail(),
 
         check('password')
-            .matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$").bail()
+            .matches(passwordRegex).bail()
             .withMessage("Your password must be 8 characters long, an uppercase letter, a lowercase letter, a number or a special character").bail(),
     ];
 }

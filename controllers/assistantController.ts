@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
+import { IAssistant, Assistant } from '../models/Assistant';
 
-
-import { IUser, User } from './../models/User';
-import { IAssistant, Assistant } from './../models/Assistant';
-
-export const adminController = {
+export const assistantController = {
 
     createNewAssistant: async function (req: Request, res: Response) {
 
@@ -21,14 +18,14 @@ export const adminController = {
         }
     },
 
-    getUsers: async function (req: Request, res: Response) {
+    getAssistants: async function (req: Request, res: Response) {
 
         try {
-            const users: IUser[] = await User.getUsers();
-            return res.status(200).json({ success: true, users });
+            const assistants : IAssistant[] = await Assistant.getAssistants();
+            return res.status(200).json(assistants);
         } catch (error) {
-            console.log(`An error occured during getting the users :${error}`);
-            return res.status(500).send({message: `An error occured during getting users => ${error}`});
+            console.log(`An error occured during getting the assistants  :${error}`);
+            return res.status(500).send({message: `An error occured during getting assistants  => ${error}`});
         }
     }
 
