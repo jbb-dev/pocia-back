@@ -14,22 +14,13 @@ export const conversationController = {
 
     getOneConversation: async function (req: RequestWithPayload, res: Response) {
 
-        // const { userId } = req.payload as IUserTokenPayload;
-        // const { assistantId } = req.params;
-
-        const userId  = "659bd4d83b89b534b2af55e0"
-        const assistantId = "653a2ee5bcce51a33028e684"
-
-        console.log("userId => ", userId)
-
-        console.log("req => ", req.body)  
-        console.log("assistantId => ", assistantId)  
-
-        // const assistantId = '653a2ee5bcce51a33028e684';
+        const { userId } = req.payload as IUserTokenPayload;
+        const { assistantId } = req.params;
 
         try 
         {
             const conversation: IConversation | null = await Conversation.findOne({userId, assistantId});
+            
             if(conversation != null)
             {
 
