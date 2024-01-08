@@ -5,7 +5,7 @@ import { conversationController } from '../controllers/conversationController';
 import { authenticateUser } from '../middlewares/authenticate';
 
 conversationRouter
-    .get("/conversation", authenticateUser, conversationController.getOneConversation)
+    .get("/conversation/:assistantId", authenticateUser, conversationController.getOneConversation)
     .post("/chat", authenticateUser, conversationController.chatWithAssistant)
 
 export default conversationRouter;

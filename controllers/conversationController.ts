@@ -8,14 +8,24 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 import { EWriterRole, IMessage, Message } from '../models/Message';
 import { Conversation, IConversation } from '../models/Conversation';
 import { IUserTokenPayload, RequestWithPayload } from '../middlewares/authenticate';
+import { IAssistant } from '~~/models/Assistant';
 
 export const conversationController = {
 
     getOneConversation: async function (req: RequestWithPayload, res: Response) {
 
-        const { userId } = req.payload as IUserTokenPayload;
-        console.log("req body => ", req.body)  
-        const assistantId = '653a2ee5bcce51a33028e684';
+        // const { userId } = req.payload as IUserTokenPayload;
+        // const { assistantId } = req.params;
+
+        const userId  = "659bd4d83b89b534b2af55e0"
+        const assistantId = "653a2ee5bcce51a33028e684"
+
+        console.log("userId => ", userId)
+
+        console.log("req => ", req.body)  
+        console.log("assistantId => ", assistantId)  
+
+        // const assistantId = '653a2ee5bcce51a33028e684';
 
         try 
         {
@@ -44,54 +54,46 @@ export const conversationController = {
     chatWithAssistant: async function (req: RequestWithPayload, res: Response) {
 
         const { userId } = req.payload as IUserTokenPayload;
-        const { content } = req.body;
+        const assistant: IAssistant = req.body.assistant;
+        const message: IMessage = req.body.message;
 
-        console.log('chat with assistant, body => ', content)
-
-        const additionnal = "Write the response using “markdown format and answer in French ”"
-        const assistantId = '653a2ee5bcce51a33028e684';
-
-        console.log('content => ', content)
-
-        // Generate chat response from Assistant
-        const completion = await openai.chat.completions.create({
-            messages: [
-                { role: EWriterRole.SYSTEM, content: additionnal  },
-                { role: EWriterRole.USER, content: content  }
-            ],
-            model: "gpt-3.5-turbo",
-        });
-        console.log('GPT COMPLETION ====> ', completion.choices[0].message.content)
-
-        // Find or Create the conversation
         try {
-            const update = { userId, assistantId };
-            const conversation = await Conversation.findOneAndUpdate({ userId, assistantId }, update, { upsert: true, new: true, setDefaultsOnInsert: true });
+
+            // Generate chat response from Assistant
+            const completion = await openai.chat.completions.create({
+                messages: [
+                    { role: EWriterRole.SYSTEM, content: assistant.biography  },
+                    { role: EWriterRole.USER, content: message.content  }
+                ],
+                model: "gpt-3.5-turbo",
+            });
+
+            if (!completion || !completion.choices || completion.choices.length === 0 || !completion.choices[0].message.content) {
+                return res.status(500).json({ message: "Error during getting the OpenAI response" });
+            }
+
+            // Find or Create the conversation
+            const update = { userId, assistantId: assistant._id };
+            const conversation = await Conversation.findOneAndUpdate({ userId, assistantId: assistant._id }, update, { upsert: true, new: true, setDefaultsOnInsert: true });
+
+            if (!conversation) {
+                return res.status(500).json({ message: "An error occured during finding or creating the conversation" });
+            }
 
             // Insert the new messages in conversation
-            const options = { ordered: true }; // Prevent additional documents from being inserted if one fails
+            const userMessage: IMessage = new Message({ senderRole: EWriterRole.USER, content: message.content, conversationId: conversation._id });
+            const assistantMessage: IMessage = new Message({ senderRole: EWriterRole.ASSISTANT, content: completion.choices[0].message.content, conversationId: conversation._id });
+            await Message.insertMany([userMessage, assistantMessage], { ordered: true }); // Prevent additional documents from being inserted if one fails
 
-            try 
-            {
-                const userMessage: IMessage = new Message({ senderRole: EWriterRole.USER, content: content, conversationId: conversation._id });
-                const assistantMessage: IMessage = new Message({ senderRole: EWriterRole.ASSISTANT, content: completion.choices[0].message.content, conversationId: conversation._id });
-                
-                // Save the two messages
-                const newMessages: IMessage[] = [userMessage, assistantMessage];
-                await Message.insertMany(newMessages, options);
 
-                // Only send the assistant response
-                res.status(200).send(assistantMessage);
-            } 
-            catch (error) {
-                console.log(`An error occured during insert of new Conversation :${error}`);
-                return res.status(500);
-            }
-            
+            // Only send the assistant response
+            res.status(200).send(assistantMessage);
+
         } catch (error) {
-            console.log(`An error occured during upserting conversation :${error}`);
-            return res.status(500);
+            console.error(`error during creating the new message =>  : ${error}`);
+            return res.status(500).json({ message: "Error during the message creation" });
         }
+
     }
 
 }
