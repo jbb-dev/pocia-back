@@ -3,20 +3,6 @@ import config from './index';
 
 const CONNECTION_URL = `mongodb://${config.db.url}/${config.db.name}`;
 
-// // DB Connection function
-// const connectDB = async (): Promise<void> => {
-//     try {
-//       await mongoose.connect(CONNECTION_URL);
-//       console.log('MongoDB successfully connected');
-//     } catch (err : any) {
-//       console.error(err.message);
-//       process.exit(1);
-//     }
-//   };
-  
-//   // Running connection
-//   connectDB();
-
 mongoose.connect(CONNECTION_URL);
 
 mongoose.connection.on('connected', () => {

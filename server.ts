@@ -26,4 +26,4 @@ app.use('/api/assistant', assistantRouter);
 
 
 // Listen server
-app.listen(MAIN_PORT, () => console.log(`Main server listening on port ${MAIN_PORT}`));
+app.listen(MAIN_PORT, () => console.log(`🌈 Main server listening on port ${MAIN_PORT}`));
