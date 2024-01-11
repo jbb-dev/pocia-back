@@ -7,6 +7,7 @@ import "./db_config/mongo";
 import conversationRouter from './routes/conversationRouter';
 import userRouter from './routes/userRouter';
 import assistantRouter from './routes/assistantRouter';
+import { terminateProcess } from './utils/functions/terminate_process';
 
 const app: Express = express();
 const MAIN_PORT = process.env.PORT;
@@ -26,4 +27,15 @@ app.use('/api/assistant', assistantRouter);
 
 
 // Listen server
-app.listen(MAIN_PORT, () => console.log(`🌈 Main server listening on port ${MAIN_PORT}`));
+const server = app.listen(MAIN_PORT, () => console.log(`🌈 Main server listening on port ${MAIN_PORT}`));
+
+// Manage uncaught errors globally
+const exitHandler = terminateProcess(server, {
+  coredump: false,
+  timeout: 500
+});
+
+process.on('uncaughtException', exitHandler(1, '!!!!!!------Unexpected Error------!!!!!!!'));
+process.on('unhandledRejection', exitHandler(1, '!!!!!!------Unhandled Promise------!!!!!!'));
+process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+process.on('SIGINT', exitHandler(0, 'SIGINT'));
