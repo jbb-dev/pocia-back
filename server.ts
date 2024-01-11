@@ -9,9 +9,9 @@ import conversationRouter from './routes/conversationRouter';
 import userRouter from './routes/userRouter';
 import assistantRouter from './routes/assistantRouter';
 import { terminateProcess } from './utils/functions/terminate_process';
+import { globalApiRateLimiter } from './utils/security/express-rate-limit';
 
 const CORS_OPTIONS = { exposedHeaders: [ 'Content-Range'] };
-
 
 const app: Express = express();
 const MAIN_PORT = process.env.PORT;
@@ -24,7 +24,7 @@ app.use(express.urlencoded({
 }));
 app.use(helmet());
 app.disable('x-powered-by'); // Reduce Fingerprinting
-
+app.use(globalApiRateLimiter); // prevent DDOS attacks from same IP
 
 // Routes
 app.get('/', (req: Request, res: Response) => res.send('home main server'));
@@ -42,6 +42,7 @@ const exitHandler = terminateProcess(server, {
   timeout: 500
 });
 
+// Handle errors
 process.on('uncaughtException', exitHandler(1, '!!!!!!------Unexpected Error------!!!!!!!'));
 process.on('unhandledRejection', exitHandler(1, '!!!!!!------Unhandled Promise------!!!!!!'));
 process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
